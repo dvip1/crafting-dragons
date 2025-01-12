@@ -18,54 +18,58 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Lox {
- static boolean hadError = false;
- private static boolean isMultiLine = false;
+    static boolean hadError = false;
+    private static boolean isMultiLine = false;
 
- public static void main(String[] args) throws IOException {
-    if (args.length > 1) {
-      System.out.println("Usage: jlox [script]");
-      System.exit(64); 
-    } else if (args.length == 1) {
-      runFile(args[0]);
-    } else {
-      runPrompt();
+    public static void main(String[] args) throws IOException {
+        if (args.length > 1) {
+            System.out.println("Usage: jlox [script]");
+            System.exit(64);
+        } else if (args.length == 1) {
+            runFile(args[0]);
+        } else {
+            runPrompt();
+        }
     }
-  }
+
     private static void runFile(String path) throws IOException {
-    byte[] bytes = Files.readAllBytes(Paths.get(path));
-    run(new String(bytes, Charset.defaultCharset()));
-  }
-   private static void runPrompt() throws IOException {
-    InputStreamReader input = new InputStreamReader(System.in);
-    BufferedReader reader = new BufferedReader(input);
-//    StringBuilder currentInput = new StringBuilder();
-  
-    for (;;) { 
- //     System.out.print(currentInput.length() == 0 ? "> " : "... ");
-      System.out.print(">> ");
-      String line = reader.readLine();
-      if (line == null) break;
-     // currentInput.append(line).append("\n"); 
-      run(line);
+        byte[] bytes = Files.readAllBytes(Paths.get(path));
+        run(new String(bytes, Charset.defaultCharset()));
     }
-  }
-  private static void run(String source) {
-    Scanner scanner = new Scanner(source);
-    List<Token> tokens = scanner.scanTokens();
 
-    // For now, just print the tokens.
-    for (Token token : tokens) {
-      System.out.println(token);
+    private static void runPrompt() throws IOException {
+        InputStreamReader input = new InputStreamReader(System.in);
+        BufferedReader reader = new BufferedReader(input);
+        // StringBuilder currentInput = new StringBuilder();
+
+        for (;;) {
+            // System.out.print(currentInput.length() == 0 ? "> " : "... ");
+            System.out.print(">> ");
+            String line = reader.readLine();
+            if (line == null)
+                break;
+            // currentInput.append(line).append("\n");
+            run(line);
+        }
     }
-  }
+
+    private static void run(String source) {
+        Scanner scanner = new Scanner(source);
+        List<Token> tokens = scanner.scanTokens();
+
+        // For now, just print the tokens.
+        for (Token token : tokens) {
+            System.out.println(token);
+        }
+    }
 
     static void error(int line, String message) {
-    report(line, "", message);
-  }
-  private static void report(int line, String where,String message) {
-    System.err.println(
-        "[line " + line + "] Error" + where + ": " + message);
-    hadError = true;
-  }
-}
+        report(line, "", message);
+    }
 
+    private static void report(int line, String where, String message) {
+        System.err.println(
+                "[line " + line + "] Error" + where + ": " + message);
+        hadError = true;
+    }
+}

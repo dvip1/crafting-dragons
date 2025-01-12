@@ -45,9 +45,13 @@ case "$1" in
     mvn package
     ;;
   run)
-    echo "Running the project..."
-    mvn exec:java
+    echo "Cleaning, compiling, testing and running the project..."
+    mvn clean compile test exec:java
     ;;
+    quick)
+        echo "Compiling and running the project"
+        mvn compile exec:java
+        ;;
   help)
     show_help
     ;;
